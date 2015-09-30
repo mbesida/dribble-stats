@@ -2,24 +2,31 @@ package com.mbesida.dribble.service
 
 import akka.actor.{ActorSystem, Props}
 import akka.pattern._
-import akka.testkit.TestKit
 import akka.util.Timeout
 import com.netaporter.precanned.dsl.basic._
 import com.typesafe.config.ConfigFactory
 import org.specs2.mutable.Specification
-import org.specs2.specification.BeforeAfterAll
 import spray.http.{HttpHeaders, HttpResponse, OAuth2BearerToken, StatusCodes}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 import scala.io.Source
 
-class DribbbleClientSpec extends Specification with BeforeAfterAll{
+class DribbbleClientSpec extends Specification{
 
   implicit val config = ConfigFactory.load()
   implicit val system = ActorSystem("dribble-client-system")
 
   val dribbbleApi = httpServerMock(system).bind(9000).block
+
+  dribbbleApi.expect(get, pathStartsWith("/normal"),
+    header(HttpHeaders.Authorization(OAuth2BearerToken(config.getString("app.auth.client-access-token")))))
+    .andRespondWith(resource("/normal_response.json"))
+
+  dribbbleApi.expect(get, pathStartsWith("/badCred"))
+    .andRespondWith(resource("/badCred.json") compose status(StatusCodes.Unauthorized))
+
+  dribbbleApi.expect(get, pathStartsWith("/bad")).andRespondWith(status(StatusCodes.InternalServerError))
 
   def readResponse(s: String): String = {
     val resource = getClass.getResourceAsStream(s)
@@ -27,20 +34,6 @@ class DribbbleClientSpec extends Specification with BeforeAfterAll{
     source.mkString
   }
 
-  override def beforeAll(): Unit = {
-    dribbbleApi.expect(get, pathStartsWith("/normal"),
-      header(HttpHeaders.Authorization(OAuth2BearerToken(config.getString("app.auth.client-access-token")))))
-      .andRespondWith(resource("/normal_response.json"))
-
-    dribbbleApi.expect(get, pathStartsWith("/badCred"))
-      .andRespondWith(resource("/badCred.json") compose status(StatusCodes.Unauthorized))
-
-    dribbbleApi.expect(get, pathStartsWith("/bad")).andRespondWith(status(StatusCodes.InternalServerError))
-  }
-
-  override def afterAll {
-    TestKit.shutdownActorSystem(system)
-  }
   "Dribble client" should {
 
     val client = system.actorOf(Props(new DribbbleClient))

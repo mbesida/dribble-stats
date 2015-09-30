@@ -4,7 +4,7 @@ import akka.actor.{ActorSystem, Props}
 import akka.contrib.throttle.Throttler.{SetTarget, _}
 import akka.contrib.throttle.TimerBasedThrottler
 import akka.io.IO
-import com.mbesida.dribble.rest.DribbbleStatHttpService
+import com.mbesida.dribble.rest.{DribbbleStatHttpServiceActor, DribbbleStatHttpService}
 import com.mbesida.dribble.service.{DribbbleClient, DribbbleService}
 import com.typesafe.config.ConfigFactory
 import spray.can.Http
@@ -22,7 +22,7 @@ object Boot extends App {
 
   val service = new DribbbleService(throttler)
 
-  val endpoint = actorSystem.actorOf(Props(new DribbbleStatHttpService(service)))
+  val endpoint = actorSystem.actorOf(Props(new DribbbleStatHttpServiceActor(service)))
 
   IO(Http) ! Http.Bind(endpoint, config.getString("app.uri"), config.getInt("app.port"))
 }

@@ -10,7 +10,8 @@ import spray.http.{HttpHeaders, HttpResponse, OAuth2BearerToken, StatusCodes}
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
-import scala.io.Source
+
+import com.mbesida.dribble._
 
 class DribbbleClientSpec extends Specification{
 
@@ -28,11 +29,6 @@ class DribbbleClientSpec extends Specification{
 
   dribbbleApi.expect(get, pathStartsWith("/bad")).andRespondWith(status(StatusCodes.InternalServerError))
 
-  def readResponse(s: String): String = {
-    val resource = getClass.getResourceAsStream(s)
-    val source = Source.fromInputStream(resource)
-    source.mkString
-  }
 
   "Dribble client" should {
 
@@ -42,7 +38,7 @@ class DribbbleClientSpec extends Specification{
     "respond with normal response" in {
       val response = Await.result((client ? "http://127.0.0.1:9000/normal").mapTo[HttpResponse], t.duration)
       response.status mustEqual StatusCodes.OK
-      response.entity.asString mustEqual readResponse("/normal_response.json")
+      response.entity.asString mustEqual resourceAsString("normal_response.json")
     }
 
     "respond with bad response" in {
@@ -53,7 +49,7 @@ class DribbbleClientSpec extends Specification{
     "respond with bad credentials response" in {
       val response = Await.result((client ? "http://127.0.0.1:9000/badCred").mapTo[HttpResponse], t.duration)
       response.status mustEqual StatusCodes.Unauthorized
-      response.entity.asString mustEqual readResponse("/badCred.json")
+      response.entity.asString mustEqual resourceAsString("badCred.json")
     }
   }
 

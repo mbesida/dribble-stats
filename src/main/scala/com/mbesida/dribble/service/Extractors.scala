@@ -35,7 +35,7 @@ object Extractors {
           Try((values.map(js => extractor(js))), findNextPageUrl(resp)).recoverWith {
             case e => Failure(new RuntimeException( s"""{"message":${e.getMessage}"""))
           }
-        case _ => failureResponse(resp)
+        case _ => Failure(new RuntimeException("Response doesn't conform to js array"))
       }
     } else failureResponse(resp)
   }

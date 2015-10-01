@@ -73,20 +73,6 @@
             <version>2.3.13</version>
             <scope>test</scope>
         </dependency>
-        <!--<dependency>
-            <groupId>org.specs2</groupId>
-            <artifactId>specs2-mock_2.10</artifactId>
-            <version>3.6.4</version>
-            <scope>test</scope>
-        </dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.mockito</groupId>-->
-            <!--<artifactId>mockito-all</artifactId>-->
-            <!--<version>1.9.5</version>-->
-            <!--<scope>test</scope>-->
-        <!--</dependency>-->
-
-
     </dependencies>
 
     <build>

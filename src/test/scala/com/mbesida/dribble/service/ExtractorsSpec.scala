@@ -3,12 +3,14 @@ package com.mbesida.dribble.service
 import com.mbesida.dribble._
 import com.mbesida.dribble.model.{DribbbleJsonProtocol, DribbbleUser, Shot}
 import com.mbesida.dribble.service.Extractors._
+import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
 import spray.http._
 
 import scala.util.{Failure, Try}
 
-
+@RunWith(classOf[JUnitRunner])
 class ExtractorsSpec extends Specification with DribbbleJsonProtocol {
 
   import ExtractorsSpec._

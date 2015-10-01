@@ -5,13 +5,16 @@ import akka.util.Timeout
 import com.mbesida.dribble.model.User
 import com.mbesida.dribble.service.DribbleServiceSpec.StubActor
 import com.typesafe.config.ConfigFactory
+import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
 import spray.http.{Uri, HttpHeaders, StatusCodes}
 import com.mbesida.dribble._
 
 import scala.concurrent.Await
 import scala.concurrent.duration.Duration
 
+@RunWith(classOf[JUnitRunner])
 class DribbleServiceSpec extends Specification {
 
   implicit val conf = ConfigFactory.load()

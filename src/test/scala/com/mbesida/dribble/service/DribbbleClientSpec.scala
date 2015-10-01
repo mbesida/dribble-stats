@@ -5,7 +5,9 @@ import akka.pattern._
 import akka.util.Timeout
 import com.netaporter.precanned.dsl.basic._
 import com.typesafe.config.ConfigFactory
+import org.junit.runner.RunWith
 import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
 import spray.http.{HttpHeaders, HttpResponse, OAuth2BearerToken, StatusCodes}
 
 import scala.concurrent.Await
@@ -13,6 +15,7 @@ import scala.concurrent.duration.Duration
 
 import com.mbesida.dribble._
 
+@RunWith(classOf[JUnitRunner])
 class DribbbleClientSpec extends Specification{
 
   implicit val config = ConfigFactory.load()

@@ -3,15 +3,17 @@ package com.mbesida.dribble.rest
 import akka.actor.ActorRefFactory
 import com.mbesida.dribble.model._
 import com.mbesida.dribble.service.DribbbleService
+import org.junit.runner.RunWith
 import org.specs2.mock.Mockito
 import org.specs2.mutable.Specification
+import org.specs2.runner.JUnitRunner
 import spray.http.ContentTypes
 import spray.json._
 import spray.testkit.Specs2RouteTest
 
 import scala.concurrent.{ExecutionContext, Future}
 
-
+@RunWith(classOf[JUnitRunner])
 class DribbbleStatHttpServiceSpec extends Specification with Specs2RouteTest with Mockito with DribbbleJsonProtocol {
 
   "DribbleStatService" should {
